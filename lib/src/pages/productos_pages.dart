@@ -82,34 +82,133 @@ class _ProductsPageState extends State<ProductsPage> {
             : ListView.builder(
                 itemCount: productos.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    height: 150,
-                    width: size.width,
-                    child: Stack(
-                      children: [
-                        Image.network(productos[index].image),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            color: Colors.black54,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 10),
-                            child: Text(
-                              (productos[index].title).toUpperCase(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                  return GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SizedBox(
+                            height: size.height / 1.5,
+                            child: Flexible(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                textDirection: TextDirection.ltr,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+
+                                children: [
+                                  SizedBox(
+                                    width: size.width / 3.5,
+                                    child: Image.network(
+                                      productos[index].image,
+                                      width: size.width / 3.5,
+                                      height: 50,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: size.width / 2,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          productos[index].title,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold),
+                                          textWidthBasis: TextWidthBasis.parent,
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          productos[index].description,
+                                          textAlign: TextAlign.justify,
+                                          style: const TextStyle(
+                                            fontSize: 11,
+                                          ),
+                                          textWidthBasis: TextWidthBasis.parent,
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          'S/. ${productos[index].price}',
+                                          textAlign: TextAlign.right,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(
+                                          width: 45,
+                                        ),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              print(
+                                                  jsonEncode(productos[index]));
+                                            },
+                                            child: Container(
+                                              // padding: EdgeInsets.symmetric(
+                                              //     horizontal: 80, vertical: 1),
+                                              child: Text('AGREGAR A CARRITO'),
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                // child: Text(productos[index].description),
                               ),
                             ),
-                          ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 150,
+                      width: size.width,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      child: Flexible(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.network(
+                              productos[index].image,
+                              width: size.width / 3.5,
+                              height: 50,
+                            ), // Espacio entre la imagen y el texto
+                            Expanded(
+                              child: Text(
+                                productos[index].title,
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   );
                 },
               ));
   }
 }
+
+// Image.network(productos[index].image),
+//                           Positioned(
+//                             bottom: 0,
+//                             left: 0,
+//                             right: 0,
+//                             child: Container(
+//                               color: Colors.black54,
+//                               padding: const EdgeInsets.symmetric(
+//                                   vertical: 8, horizontal: 10),
+//                               child: Text(
+//                                 (productos[index].title).toUpperCase(),
+//                                 style: const TextStyle(
+//                                   color: Colors.white,
+//                                   fontSize: 16,
+//                                   fontWeight: FontWeight.bold,
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
