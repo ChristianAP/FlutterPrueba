@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_carrito/shared/models/product_model.dart';
+import 'package:flutter_app_carrito/src/pages/carrito_page.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class ProductsPage extends StatefulWidget {
   String name = '';
+  List<Product> carrito = [];
 
-  ProductsPage({super.key, required this.name});
+  ProductsPage({
+    super.key,
+    required this.name,
+    required this.carrito,
+  });
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();
@@ -15,6 +21,7 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductsPageState extends State<ProductsPage> {
   List<Product> productos = [];
+  List<Product> carrito = [];
   @override
   void initState() {
     super.initState();
@@ -76,6 +83,21 @@ class _ProductsPageState extends State<ProductsPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("PRODUCTOS"),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {
+                print(jsonEncode(widget.carrito));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        CarritoPage(carrito_compras: widget.carrito),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         body: productos.isEmpty
             ? const Center(child: CircularProgressIndicator())
@@ -144,14 +166,94 @@ class _ProductsPageState extends State<ProductsPage> {
                                         ),
                                         ElevatedButton(
                                             onPressed: () {
+                                              print("Carrito de compras");
                                               print(
-                                                  jsonEncode(productos[index]));
+                                                  '${widget.carrito.length} 0');
+                                              setState(() {
+                                                if (widget.carrito.length ==
+                                                    0) {
+                                                  Product carr_data = Product(
+                                                      id: productos[index].id,
+                                                      title: productos[index]
+                                                          .title,
+                                                      price: productos[index]
+                                                          .price,
+                                                      description:
+                                                          productos[index]
+                                                              .description,
+                                                      category: productos[index]
+                                                          .category,
+                                                      image: productos[index]
+                                                          .image,
+                                                      rating: Rating(
+                                                        rate: productos[index]
+                                                            .rating
+                                                            .rate
+                                                            .toDouble(),
+                                                        count: productos[index]
+                                                            .rating
+                                                            .count,
+                                                      ),
+                                                      cantidad: 1);
+
+                                                  widget.carrito.add(carr_data);
+                                                } else {
+                                                  for (var i = 0;
+                                                      i < widget.carrito.length;
+                                                      i++) {
+                                                    if (productos[index]
+                                                            .title ==
+                                                        widget
+                                                            .carrito[i].title) {
+                                                      widget.carrito[i].price++;
+                                                      widget.carrito[i]
+                                                          .cantidad++;
+                                                      break;
+                                                    } else {
+                                                      Product carr_data =
+                                                          Product(
+                                                              id: productos[
+                                                                      index]
+                                                                  .id,
+                                                              title: productos[
+                                                                      index]
+                                                                  .title,
+                                                              price: productos[
+                                                                      index]
+                                                                  .price,
+                                                              description:
+                                                                  productos[
+                                                                          index]
+                                                                      .description,
+                                                              category:
+                                                                  productos[
+                                                                          index]
+                                                                      .category,
+                                                              image: productos[
+                                                                      index]
+                                                                  .image,
+                                                              rating: Rating(
+                                                                rate: productos[
+                                                                        index]
+                                                                    .rating
+                                                                    .rate
+                                                                    .toDouble(),
+                                                                count: productos[
+                                                                        index]
+                                                                    .rating
+                                                                    .count,
+                                                              ),
+                                                              cantidad: 1);
+
+                                                      widget.carrito
+                                                          .add(carr_data);
+                                                    }
+                                                  }
+                                                }
+                                              });
                                             },
-                                            child: Container(
-                                              // padding: EdgeInsets.symmetric(
-                                              //     horizontal: 80, vertical: 1),
-                                              child: Text('AGREGAR A CARRITO'),
-                                            ))
+                                            child:
+                                                const Text('AGREGAR A CARRITO'))
                                       ],
                                     ),
                                   ),
@@ -166,8 +268,8 @@ class _ProductsPageState extends State<ProductsPage> {
                     child: Container(
                       height: 150,
                       width: size.width,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       child: Flexible(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -180,7 +282,7 @@ class _ProductsPageState extends State<ProductsPage> {
                             Expanded(
                               child: Text(
                                 productos[index].title,
-                                style: TextStyle(fontSize: 14),
+                                style: const TextStyle(fontSize: 14),
                               ),
                             ),
                           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_carrito/shared/models/product_model.dart';
+import 'package:flutter_app_carrito/src/pages/carrito_page.dart';
 import 'package:flutter_app_carrito/src/pages/productos_pages.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -21,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<Product> prods = [];
+  List<Product> carrito_general = [];
   @override
   void initState() {
     super.initState();
@@ -66,9 +68,24 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Tienda"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                print(jsonEncode(carrito_general));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        CarritoPage(carrito_compras: carrito_general),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         body: categorias.isEmpty
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : ListView.builder(
                 itemCount: categorias.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -78,8 +95,8 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ProductsPage(
-                            name: categorias[index].name,
-                          ),
+                              name: categorias[index].name,
+                              carrito: carrito_general),
                         ),
                       );
                     },
@@ -127,42 +144,3 @@ class Categorias {
 
   Categorias({required this.name, required this.image});
 }
-
-//  return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Tienda"),
-//       ),
-//       body: Container(
-//         height: size.height,
-//         width: size.width,
-//         child: SingleChildScrollView(
-//           child: GestureDetector(
-//             onTap: () {
-//               print()
-//             },
-//             child: Column(
-//               children: [
-//                 Container(
-//                   height: 150,
-//                   width: size.width,
-//                   margin:
-//                       const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-//                   decoration: BoxDecoration(
-//                       color: Colors.blueGrey,
-//                       borderRadius: BorderRadius.circular(10)),
-//                 ),
-//                 Container(
-//                   height: 150,
-//                   width: size.width,
-//                   margin:
-//                       const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-//                   decoration: BoxDecoration(
-//                       color: Colors.blueGrey,
-//                       borderRadius: BorderRadius.circular(10)),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );

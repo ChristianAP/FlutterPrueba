@@ -18,6 +18,7 @@ class Product {
   String category;
   String image;
   Rating rating;
+  int cantidad = 0;
 
   Product({
     required this.id,
@@ -27,17 +28,18 @@ class Product {
     required this.category,
     required this.image,
     required this.rating,
+    this.cantidad = 0,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json["id"],
-        title: json["title"],
-        price: json["price"]?.toDouble(),
-        description: json["description"],
-        category: json["category"],
-        image: json["image"],
-        rating: Rating.fromJson(json["rating"]),
-      );
+      id: json["id"],
+      title: json["title"],
+      price: json["price"]?.toDouble(),
+      description: json["description"],
+      category: json["category"],
+      image: json["image"],
+      rating: Rating.fromJson(json["rating"]),
+      cantidad: json['cantidad']);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -47,6 +49,7 @@ class Product {
         "category": category,
         "image": image,
         "rating": rating.toJson(),
+        "cantidad": cantidad,
       };
 }
 
